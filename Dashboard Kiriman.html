@@ -252,6 +252,7 @@
             <th>Posisi Terakhir</th>
             <th>Status</th>
             <th>Update</th>
+          <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -263,7 +264,12 @@
             <td>Gudang Bekasi</td>
             <td><span class="status proses">Dalam Proses</span></td>
             <td>2026-05-07</td>
-          </tr>
+          <td>
+            <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
+              Edit Status
+            </button>
+          </td>
+        </tr>
 
           <tr>
             <td>PKT001240</td>
@@ -273,7 +279,12 @@
             <td>Telah Diterima</td>
             <td><span class="status terkirim">Terkirim</span></td>
             <td>2026-05-07</td>
-          </tr>
+          <td>
+            <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
+              Edit Status
+            </button>
+          </td>
+        </tr>
 
           <tr>
             <td>PKT001241</td>
@@ -283,7 +294,12 @@
             <td>Kurir Mengantar</td>
             <td><span class="status proses">Dalam Proses</span></td>
             <td>2026-05-07</td>
-          </tr>
+          <td>
+            <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
+              Edit Status
+            </button>
+          </td>
+        </tr>
 
           <tr>
             <td>PKT001242</td>
@@ -379,6 +395,11 @@ shipmentForm.addEventListener("submit", function(e){
       <td>${posisi}</td>
       <td><span class="status ${statusClass}">${status}</span></td>
       <td>${tanggal}</td>
+      <td>
+        <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
+          Edit Status
+        </button>
+      </td>
     </tr>
   `;
 
@@ -388,6 +409,38 @@ shipmentForm.addEventListener("submit", function(e){
 
   alert("Data kiriman berhasil ditambahkan");
 });
+
+function editStatus(button){
+
+  const row = button.closest("tr");
+  const statusCell = row.cells[5];
+
+  const currentStatus = statusCell.innerText.trim();
+
+  const newStatus = prompt(
+    "Update status kiriman:
+Ketik:
+- Dalam Proses
+- Terkirim
+- Retur",
+    currentStatus
+  );
+
+  if(newStatus){
+
+    let statusClass = "proses";
+
+    if(newStatus === "Terkirim"){
+      statusClass = "terkirim";
+    }
+
+    if(newStatus === "Retur"){
+      statusClass = "retur";
+    }
+
+    statusCell.innerHTML = `<span class="status ${statusClass}">${newStatus}</span>`;
+  }
+}
 
 </script>
 </body>
