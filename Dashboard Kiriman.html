@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitoring Routing Kiriman</title>
+
   <style>
     * {
       margin: 0;
@@ -37,18 +38,55 @@
       margin-bottom: 8px;
     }
 
+    .form-section,
+    .table-section,
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .form-section {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    input,
+    select,
+    button {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background: #0f62fe;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
-      margin-bottom: 25px;
+      margin: 20px 0;
     }
 
     .card {
-      background: white;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
     }
 
     .card h2 {
@@ -63,10 +101,7 @@
     }
 
     .table-section {
-      background: white;
-      border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
       overflow-x: auto;
     }
 
@@ -74,16 +109,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
       gap: 10px;
+      margin-bottom: 15px;
       flex-wrap: wrap;
     }
 
-    .table-header input {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      width: 250px;
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     table {
@@ -91,14 +125,15 @@
       border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
       padding: 14px;
       text-align: left;
       border-bottom: 1px solid #eee;
     }
 
     th {
-      background: #f1f5ff;
+      background: #edf3ff;
       color: #0f62fe;
     }
 
@@ -125,13 +160,6 @@
       color: #b00020;
     }
 
-    .footer {
-      text-align: center;
-      margin-top: 30px;
-      color: #777;
-      font-size: 14px;
-    }
-
     @media (max-width: 768px) {
       .header h1 {
         font-size: 22px;
@@ -141,307 +169,377 @@
         font-size: 22px;
       }
 
-      th, td {
-        font-size: 13px;
+      table {
+        font-size: 12px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Dashboard Monitoring Routing Kiriman</h1>
-      <p>Sistem monitoring perjalanan paket & distribusi kiriman</p>
-    </div>
 
-    <div class="form-section" style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:20px;">
+<div class="container">
 
-      <h2 style="margin-bottom:20px; color:#0f62fe;">Form Input Kiriman</h2>
-
-      <form id="shipmentForm" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:15px;">
-
-        <input type="text" id="resi" placeholder="Nomor Resi" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
-
-        <input type="text" id="pengirim" placeholder="Kota Pengirim" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
-
-        <select id="vendor" required style="padding:12px; border:1px solid #ccc; border-radius:8px;">
-          <option value="">Pilih Vendor</option>
-          <option value="JNE">JNE</option>
-          <option value="J&T">J&T</option>
-          <option value="SiCepat">SiCepat</option>
-          <option value="POS">POS Indonesia</option>
-        </select>
-
-        <input type="text" id="tujuan" placeholder="Kota Tujuan" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
-
-        <input type="text" id="posisi" placeholder="Posisi Paket" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
-
-        <select id="status" required style="padding:12px; border:1px solid #ccc; border-radius:8px;">
-          <option value="">Pilih Status</option>
-          <option value="Dalam Proses">Dalam Proses</option>
-          <option value="Terkirim">Terkirim</option>
-          <option value="Retur">Retur</option>
-        </select>
-
-        <input type="date" id="tanggal" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
-
-        <button type="submit" style="background:#0f62fe; color:white; border:none; border-radius:8px; padding:12px; font-weight:bold; cursor:pointer;">
-          Simpan Kiriman
-        </button>
-
-      </form>
-
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <h2>Total Kiriman</h2>
-        <p id="totalPaket">120</p>
-      </div>
-
-      <div class="card">
-        <h2>Dalam Proses</h2>
-        <p id="prosesPaket">35</p>
-      </div>
-
-      <div class="card">
-        <h2>Terkirim</h2>
-        <p id="terkirimPaket">78</p>
-      </div>
-
-      <div class="card">
-        <h2>Retur</h2>
-        <p id="returPaket">7</p>
-      </div>
-    </div>
-
-    <div class="table-section">
-      <div class="table-header">
-      <h2>Data Routing Kiriman</h2>
-
-      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-        <select id="vendorFilter" style="padding:10px; border:1px solid #ccc; border-radius:8px;">
-          <option value="">Semua Vendor</option>
-          <option value="JNE">JNE</option>
-          <option value="J&T">J&T</option>
-          <option value="SiCepat">SiCepat</option>
-          <option value="POS">POS Indonesia</option>
-        </select>
-
-        <input
-          type="date"
-          id="dateFilter"
-          style="padding:10px; border:1px solid #ccc; border-radius:8px;"
-        />
-
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Cari nomor resi..."
-        />
-      </div>
-    </div>
-
-      <table id="trackingTable">
-        <thead>
-          <tr>
-            <th>No Resi</th>
-            <th>Pengirim</th>
-            <th>Vendor</th>
-          <th>Tujuan</th>
-            <th>Posisi Terakhir</th>
-            <th>Status</th>
-            <th>Update</th>
-          <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>PKT001239</td>
-            <td>Bandung</td>
-          <td>JNE</td>
-          <td>Jakarta</td>
-            <td>Gudang Bekasi</td>
-            <td><span class="status proses">Dalam Proses</span></td>
-            <td>2026-05-07</td>
-          <td>
-            <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
-              Edit Status
-            </button>
-          </td>
-        </tr>
-
-          <tr>
-            <td>PKT001240</td>
-            <td>Surabaya</td>
-          <td>J&T</td>
-          <td>Semarang</td>
-            <td>Telah Diterima</td>
-            <td><span class="status terkirim">Terkirim</span></td>
-            <td>2026-05-07</td>
-          <td>
-            <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
-              Edit Status
-            </button>
-          </td>
-        </tr>
-
-          <tr>
-            <td>PKT001241</td>
-            <td>Yogyakarta</td>
-          <td>SiCepat</td>
-          <td>Bogor</td>
-            <td>Kurir Mengantar</td>
-            <td><span class="status proses">Dalam Proses</span></td>
-            <td>2026-05-07</td>
-          <td>
-            <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
-              Edit Status
-            </button>
-          </td>
-        </tr>
-
-          <tr>
-            <td>PKT001242</td>
-            <td>Medan</td>
-          <td>POS</td>
-          <td>Bandung</td>
-            <td>Alamat Tidak Ditemukan</td>
-            <td><span class="status retur">Retur</span></td>
-            <td>2026-05-06</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="footer">
-      <p>© 2026 Monitoring Routing Kiriman</p>
-    </div>
+  <div class="header">
+    <h1>Dashboard Monitoring Routing Kiriman</h1>
+    <p>Sistem monitoring perjalanan paket dan distribusi kiriman</p>
   </div>
 
-  <script>
+  <div class="form-section">
+    <h2 style="margin-bottom:20px; color:#0f62fe;">Form Input Kiriman</h2>
 
-const searchInput = document.getElementById("searchInput");
-const vendorFilter = document.getElementById("vendorFilter");
-const dateFilter = document.getElementById("dateFilter");
-const table = document.getElementById("trackingTable");
-const rows = table.getElementsByTagName("tr");
+    <form id="shipmentForm" class="form-grid">
 
-function filterTable(){
+      <input type="text" id="resi" placeholder="Nomor Resi" required>
+
+      <input type="text" id="pengirim" placeholder="Kota Pengirim" required>
+
+      <select id="jenisKiriman" required>
+        <option value="">Pilih Jenis Kiriman</option>
+        <option value="SAT">SAT</option>
+        <option value="GACOAN">GACOAN</option>
+        <option value="DIKICI">DIKICI</option>
+        <option value="BENFAM">BENFAM</option>
+      </select>
+
+      <input type="text" id="tujuan" placeholder="Kota Tujuan" required>
+
+      <input type="text" id="posisi" placeholder="Posisi Paket" required>
+
+      <select id="status" required>
+        <option value="">Pilih Status</option>
+        <option value="Dalam Proses">Dalam Proses</option>
+        <option value="Terkirim">Terkirim</option>
+        <option value="Retur">Retur</option>
+      </select>
+
+      <input type="date" id="tanggal" required>
+
+      <button type="submit">Simpan Kiriman</button>
+
+    </form>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h2>Total Kiriman</h2>
+      <p id="totalPaket">2</p>
+    </div>
+
+    <div class="card">
+      <h2>Dalam Proses</h2>
+      <p id="prosesPaket">1</p>
+    </div>
+
+    <div class="card">
+      <h2>Terkirim</h2>
+      <p id="terkirimPaket">1</p>
+    </div>
+
+    <div class="card">
+      <h2>Retur</h2>
+      <p id="returPaket">0</p>
+    </div>
+
+  </div>
+
+  <div class="table-section">
+
+    <div class="table-header">
+      <h2>Data Routing Kiriman</h2>
+
+      <div class="filters">
+
+        <select id="jenisKirimanFilter">
+          <option value="">Semua Jenis Kiriman</option>
+          <option value="SAT">SAT</option>
+          <option value="GACOAN">GACOAN</option>
+          <option value="DIKICI">DIKICI</option>
+          <option value="BENFAM">BENFAM</option>
+        </select>
+
+        <input type="date" id="dateFilter">
+
+        <input type="text" id="searchInput" placeholder="Cari nomor resi...">
+
+      </div>
+    </div>
+
+    <table id="trackingTable">
+      <thead>
+        <tr>
+          <th>No Resi</th>
+          <th>Pengirim</th>
+          <th>Jenis Kiriman</th>
+          <th>Tujuan</th>
+          <th>Posisi Terakhir</th>
+          <th>Status</th>
+          <th>Tanggal</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr id="inputRow">
+          <td><input type="text" id="tableResi" placeholder="No Resi"></td>
+          <td><input type="text" id="tablePengirim" placeholder="Pengirim"></td>
+          <td>
+            <select id="tableJenisKiriman">
+              <option value="SAT">SAT</option>
+              <option value="GACOAN">GACOAN</option>
+              <option value="DIKICI">DIKICI</option>
+              <option value="BENFAM">BENFAM</option>
+            </select>
+          </td>
+          <td><input type="text" id="tableTujuan" placeholder="Tujuan"></td>
+          <td><input type="text" id="tablePosisi" placeholder="Posisi"></td>
+          <td>
+            <select id="tableStatus">
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Terkirim">Terkirim</option>
+              <option value="Retur">Retur</option>
+            </select>
+          </td>
+          <td><input type="date" id="tableTanggal"></td>
+          <td>
+            <button type="button" onclick="addTableRow()">Tambah</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>PKT001239</td>
+          <td>Bandung</td>
+          <td>SAT</td>
+          <td>Jakarta</td>
+          <td>Gudang Bekasi</td>
+          <td><span class="status proses">Dalam Proses</span></td>
+          <td>2026-05-07</td>
+          <td><button type="button" onclick="editStatus(this)">Edit Status</button></td>
+        </tr>
+
+        <tr>
+          <td>PKT001240</td>
+          <td>Surabaya</td>
+          <td>GACOAN</td>
+          <td>Semarang</td>
+          <td>Telah Diterima</td>
+          <td><span class="status terkirim">Terkirim</span></td>
+          <td>2026-05-07</td>
+          <td><button type="button" onclick="editStatus(this)">Edit Status</button></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+
+const searchInput = document.getElementById('searchInput');
+const jenisKirimanFilter = document.getElementById('jenisKirimanFilter');
+const dateFilter = document.getElementById('dateFilter');
+const shipmentForm = document.getElementById('shipmentForm');
+const tbody = document.querySelector('#trackingTable tbody');
+
+function filterTable() {
 
   const searchValue = searchInput.value.toUpperCase();
-  const vendorValue = vendorFilter.value.toUpperCase();
+  const jenisKirimanValue = jenisKirimanFilter.value.toUpperCase();
   const dateValue = dateFilter.value;
 
-  for(let i = 1; i < rows.length; i++){
+  const rows = tbody.querySelectorAll('tr');
 
-    const resiTd = rows[i].getElementsByTagName("td")[0];
-    const vendorTd = rows[i].getElementsByTagName("td")[2];
+  rows.forEach(function(row) {
 
-    if(resiTd && vendorTd){
+    const cells = row.querySelectorAll('td');
 
-      const resiText = resiTd.textContent || resiTd.innerText;
-      const vendorText = vendorTd.textContent || vendorTd.innerText;
-      const dateTd = rows[i].getElementsByTagName("td")[6];
-      const dateText = dateTd.textContent || dateTd.innerText;
-
-      const matchResi = resiText.toUpperCase().includes(searchValue);
-      const matchVendor = vendorValue === "" || vendorText.toUpperCase() === vendorValue;
-      const matchDate = dateValue === "" || dateText === dateValue;
-
-      rows[i].style.display = (matchResi && matchVendor && matchDate)
-        ? ""
-        : "none";
+    if (cells.length === 0) {
+      return;
     }
-  }
+
+    const resi = cells[0].textContent.toUpperCase();
+    const jenisKiriman = cells[2].textContent.toUpperCase();
+    const tanggal = cells[6].textContent;
+
+    const matchResi = resi.includes(searchValue);
+    const matchJenisKiriman = jenisKirimanValue === '' || jenisKiriman === jenisKirimanValue;
+    const matchDate = dateValue === '' || tanggal === dateValue;
+
+    if (matchResi && matchJenisKiriman && matchDate) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
 }
 
-searchInput.addEventListener("keyup", filterTable);
-vendorFilter.addEventListener("change", filterTable);
-dateFilter.addEventListener("change", filterTable);
+searchInput.addEventListener('keyup', filterTable);
+jenisKirimanFilter.addEventListener('change', filterTable);
+dateFilter.addEventListener('change', filterTable);
 
+shipmentForm.addEventListener('submit', function(event) {
 
-const shipmentForm = document.getElementById("shipmentForm");
-const tbody = document.querySelector("#trackingTable tbody");
+  event.preventDefault();
 
-shipmentForm.addEventListener("submit", function(e){
+  const resi = document.getElementById('resi').value;
+  const pengirim = document.getElementById('pengirim').value;
+  const jenisKiriman = document.getElementById('jenisKiriman').value;
+  const tujuan = document.getElementById('tujuan').value;
+  const posisi = document.getElementById('posisi').value;
+  const status = document.getElementById('status').value;
+  const tanggal = document.getElementById('tanggal').value;
 
-  e.preventDefault();
+  let statusClass = 'proses';
 
-  const resi = document.getElementById("resi").value;
-  const pengirim = document.getElementById("pengirim").value;
-  const vendor = document.getElementById("vendor").value;
-  const tujuan = document.getElementById("tujuan").value;
-  const posisi = document.getElementById("posisi").value;
-  const status = document.getElementById("status").value;
-  const tanggal = document.getElementById("tanggal").value;
-
-  let statusClass = "proses";
-
-  if(status === "Terkirim"){
-    statusClass = "terkirim";
+  if (status === 'Terkirim') {
+    statusClass = 'terkirim';
   }
 
-  if(status === "Retur"){
-    statusClass = "retur";
+  if (status === 'Retur') {
+    statusClass = 'retur';
   }
 
-  const row = `
-    <tr>
-      <td>${resi}</td>
-      <td>${pengirim}</td>
-      <td>${vendor}</td>
-      <td>${tujuan}</td>
-      <td>${posisi}</td>
-      <td><span class="status ${statusClass}">${status}</span></td>
-      <td>${tanggal}</td>
-      <td>
-        <button onclick="editStatus(this)" style="padding:6px 10px; border:none; background:#0f62fe; color:white; border-radius:6px; cursor:pointer;">
-          Edit Status
-        </button>
-      </td>
-    </tr>
-  `;
+  const newRow = document.createElement('tr');
 
-  tbody.innerHTML += row;
+  newRow.innerHTML =
+    '<td>' + resi + '</td>' +
+    '<td>' + pengirim + '</td>' +
+    '<td>' + jenisKiriman + '</td>' +
+    '<td>' + tujuan + '</td>' +
+    '<td>' + posisi + '</td>' +
+    '<td><span class="status ' + statusClass + '">' + status + '</span></td>' +
+    '<td>' + tanggal + '</td>' +
+    '<td><button type="button" onclick="editStatus(this)">Edit Status</button></td>';
+
+  tbody.appendChild(newRow);
 
   shipmentForm.reset();
 
-  alert("Data kiriman berhasil ditambahkan");
+  updateDashboard();
+
+function addTableRow() {
+
+  const resi = document.getElementById('tableResi').value;
+  const pengirim = document.getElementById('tablePengirim').value;
+  const jenisKiriman = document.getElementById('tableJenisKiriman').value;
+  const tujuan = document.getElementById('tableTujuan').value;
+  const posisi = document.getElementById('tablePosisi').value;
+  const status = document.getElementById('tableStatus').value;
+  const tanggal = document.getElementById('tableTanggal').value;
+
+  if (!resi || !pengirim || !tujuan || !posisi || !tanggal) {
+    alert('Lengkapi data terlebih dahulu');
+    return;
+  }
+
+  let statusClass = 'proses';
+
+  if (status === 'Terkirim') {
+    statusClass = 'terkirim';
+  }
+
+  if (status === 'Retur') {
+    statusClass = 'retur';
+  }
+
+  const row = document.createElement('tr');
+
+  row.innerHTML =
+    '<td>' + resi + '</td>' +
+    '<td>' + pengirim + '</td>' +
+    '<td>' + jenisKiriman + '</td>' +
+    '<td>' + tujuan + '</td>' +
+    '<td>' + posisi + '</td>' +
+    '<td><span class="status ' + statusClass + '">' + status + '</span></td>' +
+    '<td>' + tanggal + '</td>' +
+    '<td><button type="button" onclick="editStatus(this)">Edit Status</button></td>';
+
+  tbody.appendChild(row);
+
+  document.getElementById('tableResi').value = '';
+  document.getElementById('tablePengirim').value = '';
+  document.getElementById('tableTujuan').value = '';
+  document.getElementById('tablePosisi').value = '';
+  document.getElementById('tableTanggal').value = '';
+
+  updateDashboard();
+  filterTable();
+}
+
+  filterTable();
 });
 
-function editStatus(button){
+function editStatus(button) {
 
-  const row = button.closest("tr");
+  const row = button.closest('tr');
   const statusCell = row.cells[5];
 
-  const currentStatus = statusCell.innerText.trim();
+  const currentStatus = statusCell.textContent.trim();
 
   const newStatus = prompt(
-    "Update status kiriman:
-Ketik:
-- Dalam Proses
-- Terkirim
-- Retur",
+    'Update status kiriman:\n\n- Dalam Proses\n- Terkirim\n- Retur',
     currentStatus
   );
 
-  if(newStatus){
-
-    let statusClass = "proses";
-
-    if(newStatus === "Terkirim"){
-      statusClass = "terkirim";
-    }
-
-    if(newStatus === "Retur"){
-      statusClass = "retur";
-    }
-
-    statusCell.innerHTML = `<span class="status ${statusClass}">${newStatus}</span>`;
+  if (!newStatus) {
+    return;
   }
+
+  let statusClass = 'proses';
+
+  if (newStatus === 'Terkirim') {
+    statusClass = 'terkirim';
+  }
+
+  if (newStatus === 'Retur') {
+    statusClass = 'retur';
+  }
+
+  statusCell.innerHTML = '<span class="status ' + statusClass + '">' + newStatus + '</span>';
+
+  updateDashboard();
 }
 
+function updateDashboard() {
+
+  const rows = tbody.querySelectorAll('tr');
+
+  let total = 0;
+  let proses = 0;
+  let terkirim = 0;
+  let retur = 0;
+
+  rows.forEach(function(row) {
+
+    const statusText = row.cells[5].textContent.trim();
+
+    total++;
+
+    if (statusText === 'Dalam Proses') {
+      proses++;
+    }
+
+    if (statusText === 'Terkirim') {
+      terkirim++;
+    }
+
+    if (statusText === 'Retur') {
+      retur++;
+    }
+  });
+
+  document.getElementById('totalPaket').textContent = total;
+  document.getElementById('prosesPaket').textContent = proses;
+  document.getElementById('terkirimPaket').textContent = terkirim;
+  document.getElementById('returPaket').textContent = retur;
+}
+
+updateDashboard();
+
 </script>
+
 </body>
 </html>
