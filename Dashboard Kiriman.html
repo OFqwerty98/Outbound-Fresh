@@ -154,6 +154,45 @@
       <p>Sistem monitoring perjalanan paket & distribusi kiriman</p>
     </div>
 
+    <div class="form-section" style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:20px;">
+
+      <h2 style="margin-bottom:20px; color:#0f62fe;">Form Input Kiriman</h2>
+
+      <form id="shipmentForm" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:15px;">
+
+        <input type="text" id="resi" placeholder="Nomor Resi" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
+
+        <input type="text" id="pengirim" placeholder="Kota Pengirim" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
+
+        <select id="vendor" required style="padding:12px; border:1px solid #ccc; border-radius:8px;">
+          <option value="">Pilih Vendor</option>
+          <option value="JNE">JNE</option>
+          <option value="J&T">J&T</option>
+          <option value="SiCepat">SiCepat</option>
+          <option value="POS">POS Indonesia</option>
+        </select>
+
+        <input type="text" id="tujuan" placeholder="Kota Tujuan" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
+
+        <input type="text" id="posisi" placeholder="Posisi Paket" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
+
+        <select id="status" required style="padding:12px; border:1px solid #ccc; border-radius:8px;">
+          <option value="">Pilih Status</option>
+          <option value="Dalam Proses">Dalam Proses</option>
+          <option value="Terkirim">Terkirim</option>
+          <option value="Retur">Retur</option>
+        </select>
+
+        <input type="date" id="tanggal" required style="padding:12px; border:1px solid #ccc; border-radius:8px;" />
+
+        <button type="submit" style="background:#0f62fe; color:white; border:none; border-radius:8px; padding:12px; font-weight:bold; cursor:pointer;">
+          Simpan Kiriman
+        </button>
+
+      </form>
+
+    </div>
+
     <div class="cards">
       <div class="card">
         <h2>Total Kiriman</h2>
@@ -304,6 +343,51 @@ function filterTable(){
 searchInput.addEventListener("keyup", filterTable);
 vendorFilter.addEventListener("change", filterTable);
 dateFilter.addEventListener("change", filterTable);
+
+
+const shipmentForm = document.getElementById("shipmentForm");
+const tbody = document.querySelector("#trackingTable tbody");
+
+shipmentForm.addEventListener("submit", function(e){
+
+  e.preventDefault();
+
+  const resi = document.getElementById("resi").value;
+  const pengirim = document.getElementById("pengirim").value;
+  const vendor = document.getElementById("vendor").value;
+  const tujuan = document.getElementById("tujuan").value;
+  const posisi = document.getElementById("posisi").value;
+  const status = document.getElementById("status").value;
+  const tanggal = document.getElementById("tanggal").value;
+
+  let statusClass = "proses";
+
+  if(status === "Terkirim"){
+    statusClass = "terkirim";
+  }
+
+  if(status === "Retur"){
+    statusClass = "retur";
+  }
+
+  const row = `
+    <tr>
+      <td>${resi}</td>
+      <td>${pengirim}</td>
+      <td>${vendor}</td>
+      <td>${tujuan}</td>
+      <td>${posisi}</td>
+      <td><span class="status ${statusClass}">${status}</span></td>
+      <td>${tanggal}</td>
+    </tr>
+  `;
+
+  tbody.innerHTML += row;
+
+  shipmentForm.reset();
+
+  alert("Data kiriman berhasil ditambahkan");
+});
 
 </script>
 </body>
